@@ -10,14 +10,14 @@ public class Dichotomy {
         double rB = 10;  // Правая граница
         double e = 10e-5; // Точность промежутка
         double delta=0.000001;
-        int k =1;
+        int k =0;
         while (Math.abs(rB-lB) > e){
             double x = (rB+lB)/2;
            if(fun(x-delta,a,b)<fun(x+delta,a,b)){
                rB=x;
            }
            else lB=x;
-            System.out.println(k+": x:= " + (rB+lB)/2 + " y:= " + fun((rB+lB)/2,a,b));
+            System.out.println("Итерация "+k+":x:= " + (rB+lB)/2 + " f(x):= " + fun((rB+lB)/2,a,b) +" Отрезок ["+lB+";"+rB+"]");
             k++;
         }
     }

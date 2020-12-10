@@ -12,11 +12,11 @@ public class GradientDescent {
      * @param d - величина шага
      * @param x01,x02
      */
-    static double e1 = 0.0001;
-    static double e2 = 0.0001;
-    static double d = 10; // Величина шага
-    static double[] x01 = {0.5, 0.5};
-    static double[] x02 = {2.0, 2.0};
+    static double e1 = 0.0001; //  Точность градиента
+    static double e2 = 0.0000001; // Точность для X
+    static double d0 = 1; // Начальная величина шага
+    static double[] x01 = {0.5, 0.5}; // Начальная точка для f1
+    static double[] x02 = {2.0, 2.0}; // Начальная точка для f2
 
     // Интерейсы для задания функций и вектора-градиента
     interface Fun {
@@ -46,8 +46,7 @@ public class GradientDescent {
 
     static Fun f1 = (double[] x) -> (100 * (x[1] - x[0] * x[0]) * (x[1] - x[0] * x[0]) + (1 - x[0]) * (1 - x[0]));
     static Fun f2 = (double[] x) -> ((x[0] * x[0] + x[1] - 11) * (x[0] * x[0] + x[1] - 11) + (x[0] + x[1] * x[1] - 7) * (x[0] + x[1] * x[1] - 7));
-
-    static Grad gradF1 = (double[] x) -> new double[]{400 * x[0] * (x[0] * x[0] - x[1]) + 2 * x[0] - 2, 200 * x[0] * x[0] - 200 * x[1]};
+    static Grad gradF1 = (double[] x) -> new double[]{400*x[0]*x[0]*x[0]-400*x[0]*x[1]+2*x[0]-2,200*x[1]-200*x[0]*x[0]};
     static Grad gradF2 = (double[] x) -> new double[]{4 * x[0] * (x[0] * x[0] + x[1] - 11) + 2 * x[0] + 2 * x[1] * x[1] - 14, 2 * x[0] * x[0] + 4 * x[1] * (x[0] + x[1] * x[1] - 7) + 2 * x[1] - 22};
 
     /**
@@ -57,6 +56,7 @@ public class GradientDescent {
      */
     static void Minimize(double[] x, Fun f, Grad g) {
         int k = 0;
+        double d = d0;
         while (g.module(x)>=e1){
             double[] x1 = {x[0] - d * g.values(x)[0], x[1] - d * g.values(x)[1]};
             //Условие выхода
@@ -70,12 +70,11 @@ public class GradientDescent {
                 break;
             }
             else{
-                System.out.println("Iteration "+k+": f(x)= "+f.value(x1)+"  x=("+x1[0]+";"+x1[1]+")");
+                System.out.println("Iteration "+k+": f(x)= "+f.value(x)+"  x=("+x[0]+";"+x[1]+")" +" Норма градиента:=" +g.module(x));
                 k++;
                 x=x1;
             }
         }
-
-        System.out.println("Iteration "+k+": f(x)= "+f.value(x)+"  x=("+x[0]+";"+x[1]+")");
+        System.out.println("Iteration "+k+": f(x)= "+f.value(x)+"  x=("+x[0]+";"+x[1]+")" +" Норма градиента:=" +g.module(x));
     }
 }

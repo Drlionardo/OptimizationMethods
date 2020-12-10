@@ -10,10 +10,11 @@ public class Deform {
         System.out.println("Second function");
         Minimize(f2,x01, x02, x03);
     }
-    static double e = 0.00001;
+    static double e = 0.00001; //Точность
     static double alpha = 1.0;
     static double beta = 0.5;
     static double gamma = 2.9;
+    //Начальные точки
     static double[] x01 = {0.0, 1.0};
     static double[] x02 = {-1.0, 0.0};
     static double[] x03 = {1.0, 0.0};
@@ -63,7 +64,7 @@ public class Deform {
             }
             k++;
             Arrays.sort(d, Comparator.comparingDouble(f::value));
-            System.out.println("Iteration "+k+": f(x)= "+f.value(d[0])+"  x=("+d[0][0]+";"+d[0][1]+")");
+            System.out.println("Iteration "+k+": f(x)= "+f.value(d[0])+"  x=("+d[0][0]+";"+d[0][1]+")" +" Точки треугольника: "+ Arrays.deepToString(d));
         }
     }
 }

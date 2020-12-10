@@ -13,10 +13,10 @@ public class GradientFletcher {
      * @param x01,x02
      */
     static boolean enableSingleOptDEBUG=false;
-    static double e1 = 0.0001;
-    static double e2 = 0.0015;
-    static double[] x01 = {0.5, 0.5};
-    static double[] x02 = {2.0, 2.0};
+    static double e1 = 0.00001; // Точной градиента
+    static double e2 = 0.000015;// Точность для x
+    static double[] x01 = {0.5, 0.5}; // Начальная точка для  f1
+    static double[] x02 = {2.0, 1.0}; // Начальная точка для  f2
 
     // Интерейсы для задания функций и вектора-градиента
     interface Fun {
@@ -47,7 +47,7 @@ public class GradientFletcher {
     static Fun f1 = (double[] x) -> (100 * (x[1] - x[0] * x[0]) * (x[1] - x[0] * x[0]) + (1 - x[0]) * (1 - x[0]));
     static Fun f2 = (double[] x) -> ((x[0] * x[0] + x[1] - 11) * (x[0] * x[0] + x[1] - 11) + (x[0] + x[1] * x[1] - 7) * (x[0] + x[1] * x[1] - 7));
 
-    static Grad gradF1 = (double[] x) -> new double[]{400 * x[0] * (x[0] * x[0] - x[1]) + 2 * x[0] - 2, 200 * x[0] * x[0] - 200 * x[1]};
+    static Grad gradF1 = (double[] x) -> new double[]{400*x[0]*x[0]*x[0]-400*x[0]*x[1]+2*x[0]-2,200*x[1]-200*x[0]*x[0]};
     static Grad gradF2 = (double[] x) -> new double[]{4 * x[0] * (x[0] * x[0] + x[1] - 11) + 2 * x[0] + 2 * x[1] * x[1] - 14, 2 * x[0] * x[0] + 4 * x[1] * (x[0] + x[1] * x[1] - 7) + 2 * x[1] - 22};
     //Функция дли минимизации fi(t)
     private static double tK(Fun f, double t, double[] x, double[] d0){
@@ -59,7 +59,7 @@ public class GradientFletcher {
         final double ratio = (1+Math.sqrt(5))/2;
         double lb = -10; //Левая граница
         double rb = 10;  // Правая граница
-        double e = 0.000001; // Точность промежутка
+        double e = 0.0000000000001; // Точность промежутка
         int k =1;
         while (Math.abs(rb-lb) > e){
             double x1 =rb - (rb-lb)/ratio;
@@ -106,7 +106,8 @@ public class GradientFletcher {
                 break;
             }
             else{
-                System.out.println("Iteration "+k+": f(x)= "+f.value(x1)+"  x=("+x1[0]+";"+x1[1]+")");
+                System.out.println("Iteration "+k+": f(x)= "+f.value(x1)+"  x=("+x1[0]+";"+x1[1]+")" +" Норма градиента:=" +g.module(x));
+
                 k++;
                 xPrev=x;
                 dPrev=d;
@@ -114,6 +115,7 @@ public class GradientFletcher {
             }
         }
         //Final output
-        System.out.println("Iteration "+k+": f(x)= "+f.value(x)+"  x=("+x[0]+";"+x[1]+")");
+        System.out.println("Iteration "+k+": f(x)= "+f.value(x)+"  x=("+x[0]+";"+x[1]+")" +" Норма градиента:=" +g.module(x));
+
     }
 }
